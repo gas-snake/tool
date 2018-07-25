@@ -3,16 +3,21 @@
 import requests
 from bs4 import BeautifulSoup as bs
 import xml.sax
-#提交链接，获取网页r
-r = requests.get('http://2017.wuxianshua.com:81/web1/')
-r.encoding='gb2312'
-# s=52347*(80161+38740)-(64690+16422)*80
-# s = int(s)
-# print(r.text)
-# print (s)
-# soup = ''
+
+url = "http://2017.wuxianshua.com:81/web1/"
+#设置提交方式，使用session()包含cookies
+r = requests.session()
+print('session',r)
+print('cookies',r.cookies.get_dict())
+#提交链接，获取网页
+req = r.get(url)
+print('session',r)
+print('cookies',r.cookies.get_dict())
+# 设置编码
+req.encoding='gb2312'
+
 #把网页进行分析
-soup = bs(r.text,'html.parser')
+soup = bs(req.text,'html.parser')
 print(soup.title)
 # print(type(soup))
 #找到对应的标签
@@ -23,13 +28,15 @@ print(divt)
 print(type(divt))
 # print(type(divt.encode("utf-8")))
 # s=divt
+#eval可以将算术表达式进行计算
 result=eval(divt)
 # print(eval(divt))
 # print (type(result))
-r3=requests.session()
-r2 = r3.post('http://2017.wuxianshua.com:81/web1/', data = {"res":result})
-r2.encoding='gb2312'
-print(r2.text)
-# print (53742*(62747+47219))
-# print ((23555+88140)*80)
-# print (5909792772-8935600)
+
+#使用sessiong再次提交网页，使用POST方式，代入计算结果
+req = r.post(url, data = {"res":result})
+# 对结果编码
+req.encoding='gb2312'
+# 显示结果
+print(req.text)
+
