@@ -2,7 +2,8 @@
 #coding=utf-8 
 import requests
 from bs4 import BeautifulSoup as bs
-import xml.sax
+import cchardet
+
 
 url = "http://2017.wuxianshua.com:81/web1/"
 #设置提交方式，使用session()包含cookies
@@ -13,8 +14,12 @@ print('cookies',r.cookies.get_dict())
 req = r.get(url)
 print('session',r)
 print('cookies',r.cookies.get_dict())
+print('content',req.content)
+codetype=cchardet.detect(req.content)
+print('codetype',codetype)
 # 设置编码
-req.encoding='gb2312'
+req.encoding=codetype["encoding"]
+
 
 #把网页进行分析
 soup = bs(req.text,'html.parser')
@@ -36,7 +41,7 @@ result=eval(divt)
 #使用sessiong再次提交网页，使用POST方式，代入计算结果
 req = r.post(url, data = {"res":result})
 # 对结果编码
-req.encoding='gb2312'
+req.encoding=codetype["encoding"]
 # 显示结果
 print(req.text)
 
