@@ -54,7 +54,12 @@ print ('soup',soup)
     print('session',r)
     print('cookies',r.cookies.get_dict())
     print('cookies',r.cookies.get_dict())
-  
+    
+soup = BeautifulSoup('<option value="28">电子零组件业</option>', 'lxml')
+data = soup.findall('option')[0]  # findall返回列表，因为只有一个，所以索引0
+text = data.text
+value = data['value']  # 注意这个是字符串不是数字
+print "text:%s value:%s" % （text, value）  
 
 http://dhcl.12321.cn/fraud/needtodo?reportPhoneOperator=0&reportPhoneProvince=0&reportPhoneCity=0&reportedPhoneOperator=1&reportedPhoneProvince=16&reportedPhoneCity=325&startTime=2018-06-29&endTime=2018-07-29&reportedPhoneType=0&phoneType=report_phone&phone=&retrieve=id&words=&limit=20
 http://dhcl.12321.cn/fraud/needtodo/s/%2Ffraud%2Fneedtodo/reportPhoneOperator/0/reportPhoneProvince/0/reportPhoneCity/0/reportedPhoneOperator/1/reportedPhoneProvince/16/reportedPhoneCity/0/startTime/2018-06-29/endTime/2018-07-29/reportedPhoneType/0/phoneType/report_phone/phone//retrieve/id/words//limit/20/page/2?reportPhoneOperator=0&reportPhoneProvince=0&reportPhoneCity=0&reportedPhoneOperator=1&reportedPhoneProvince=16&reportedPhoneCity=0&startTime=2018-06-29&endTime=2018-07-29&reportedPhoneType=0&phoneType=report_phone&phone=&retrieve=id&words=&limit=500
