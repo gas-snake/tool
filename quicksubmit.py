@@ -4,17 +4,19 @@ import requests
 import cchardet
 from bs4 import BeautifulSoup as bs
 # 设置URL
-url = "https://jianguan.dianhua.cn"
+# url = "https://jianguan.dianhua.cn"
+url = "http://2017.wuxianshua.com:81/web1/"
+r = requests.session()
 def GetHtml (url,Htype='get',data={}):
     #设置提交方式，使用session()包含cookies
-    r = requests.session()
+    # r = requests.session()
     print('session',r)
     print('cookies',r.cookies.get_dict())
     #提交链接，获取网页
     if Htype == 'get' :
         req = r.get(url)
     elif Htype == 'post':
-        req = r.get(url,data)
+        req = r.post(url,data)
     # 判断编码
     codetype=cchardet.detect(req.content)
     # 设置编码
@@ -23,38 +25,55 @@ def GetHtml (url,Htype='get',data={}):
 
 
 
-
-def Htmlread(HTXT='',hname='',hid=''):
-    print('HTXT',HTXT)
+#HTML查找函数，HTXT为输入的HTML文件，hname为需要找的TAG名称，att为其它属性条件，如{"class": "token","name":'token','type':"hidden"}
+def HtmlSearch(HTXT='',hname='',att={}):
+    # print('HTXT',HTXT)
     #把网页进行分析
     soup = bs(HTXT,'html.parser')
-    print(soup.title)
+    # print(soup.title)
+    # print(soup.head)
     #找到对应的标签
     
-    div = soup.find(name=hname,id=hid)
-    print (div)
-    divt=''
-    if div != None:
-        divt=div.text
-    return divt
-
-
+    rows = soup.find_all(name=hname,attrs=att)
+    print (rows)
+    return rows
+#标签解读函数，att="text"时输出TEXT，att="id"等属性时输出对应的value值
+def HtmlRead(Htxt,att='text'):
+    if att =='text':
+        return Htxt.text
+    else:
+        return Htxt[att]
+'''
 #测试数据
 htxt= GetHtml(url,'get',)
 print ('dddddddddddddd')
 print (htxt)
 soup = bs(htxt,'html.parser')
-print (soup.title)
+print ('dddddddddddddd')
+print (soup.div)
+print ('dddddddddddddd')
+print (soup.head)
 print ('soup',soup)
-# inputs = soup.findall(name='input')
-# print (inputs)
+# inputs = soup.find_all(name='input',type = "hidden")
+at=['login_txtbx password','password']#传入attr的参数可以是LSIT，也可以是字典
+at2={"class": "token","name":'token','type':"hidden"}
+at3={"id":"math"}
+inputs = soup.find_all('div',at3)
+# inputs = soup.find_all('input',at2)
+soup.find()
+print ('inputs',inputs)
+
+for ins in inputs:
+    print (type(ins))
+#     pass
 # print (type(inputs))
 # print (Htmlread(htxt,'div','math'))
+'''
 '''
     print('session',r)
     print('cookies',r.cookies.get_dict())
     print('cookies',r.cookies.get_dict())
-    
+
 soup = BeautifulSoup('<option value="28">电子零组件业</option>', 'lxml')
 data = soup.findall('option')[0]  # findall返回列表，因为只有一个，所以索引0
 text = data.text
