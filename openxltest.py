@@ -15,7 +15,8 @@ Citys = ['济源','焦作']
 print  (Citys)  
 #判断列
 CCol = 9
-
+#表头行
+RTitle = 1
 XlsName = '合并.xls'
 #=============读取文件=======================
 #取指定文件夹里的所有文件
@@ -33,13 +34,25 @@ print (XlsFileList)
 XlsData = []
 XlsN = 0
 for XlsFile in XlsFileList:
+    #当前文件读出的临时表
+    Tfile = []
+    #当前文件名
+    Fname = os.path.basename(XlsFile)
     #判断是否是第一个文件，是的话取标题行，不是跳过
     if XlsN == 0 :
-        XlsData = XlsData + ofile.XlsReadTableAll(XlsFile,0,1)
+        Tfile = ofile.XlsReadTableAll(XlsFile,0,1)
+        #给临时表加文件名列
+        for i in range(RTitle,len(Tfile)):
+            Tfile[i].append(Fname)
     else:
-        XlsData = XlsData + ofile.XlsReadTableAll(XlsFile,0,2)
+        Tfile =  ofile.XlsReadTableAll(XlsFile,0,1 + RTitle)
+        #给临时表加文件名列
+        for tl in Tfile:
+            tl.append(Fname)
+    #把临时表拼入主表
+    XlsData = XlsData + Tfile
     XlsN = XlsN + 1
-
+    
 print  (XlsData)  
 print(len(XlsData))
 
